@@ -1,0 +1,91 @@
+openapi: 3.0.3
+info:
+  title: User API
+  description: API to retrieve user details.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+paths:
+  /user:
+    get:
+      tags:
+        - User Report
+      security:
+        - OauthSecurityClient:
+            - read
+      summary: Retrieve user information
+      description: Fetch a user's information by their document identifier.
+      operationId: getUser
+      parameters:
+        - name: document
+          in: query
+          required: true
+          description: The document identifier of the user.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with the user details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request, likely invalid document.
+        '404':
+          description: User not found.
+  /users:
+    get:
+      tags:
+        - User Report
+      security:
+        - OauthSecurityClient:
+            - read
+      summary: Retrieve user list
+      description: Fetch a User list.
+      operationId: getUsers
+      parameters:
+        - name: enabled
+          in: query
+          required: false
+          description: Only show if User is enabled
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Successful response with the user list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '400':
+          description: Bad request, likely invalid document.
+        '404':
+          description: User not found.
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the user.
+        name:
+          type: string
+          description: Name of the user.
+        document:
+          type: string
+          description: Document of the user.
+        age:
+          type: string
+          description: Age of the user.
+    Users:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'

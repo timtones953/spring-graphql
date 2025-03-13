@@ -1,0 +1,18 @@
+scalar LocalDate
+scalar BigDecimal
+scalar LocalDateTime
+
+type User {
+    id: ID,
+    name: String
+    document: String
+    age: Int
+}
+
+type Users {
+    results: [User]
+}
+
+type Query {
+    user(document: String): Users
+}
